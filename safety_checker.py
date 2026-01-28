@@ -31,8 +31,14 @@ class ClipSafetyChecker(PreTrainedModel):
     config_class = CLIPConfig
     _no_split_modules = ["CLIPEncoderLayer"]
 
+    # 🔥 FIX cho transformers mới
+    _tied_weights_keys = []
+    _keys_to_ignore_on_load_missing = []
+    _keys_to_ignore_on_load_unexpected = []
+
     def __init__(self, config: CLIPConfig):
         super().__init__(config)
+        self.all_tied_weights_keys = {}
         self.vision_model = CLIPVisionModel(config.vision_config)
         self.visual_projection = nn.Linear(config.vision_config.hidden_size, config.projection_dim, bias=False)
 
